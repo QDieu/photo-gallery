@@ -7,7 +7,7 @@ const GridWrapper = styled.div``;
 
 const Wrapper = styled.div`
     background-color: skyblue;
-
+    padding: 32px;
     display: grid;
 
     gap: 15px;
@@ -35,6 +35,7 @@ type TProps = {
 };
 
 export const CardRow: React.FC<TProps> = ({ photos }) => {
+    console.log(photos);
     return (
         <Wrapper>
             {photos.map((item) => (
