@@ -27,6 +27,34 @@ const Wrapper = styled.div`
   & ${GridWrapper}:nth-child(4n) {
     grid-column: 2/5;
   }
+
+  @media screen and (max-width: 991px) {
+    & {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    & ${GridWrapper}:nth-child(4n - 3) {
+      grid-column: 1/2;
+    }
+
+    & ${GridWrapper}:nth-child(4n - 2) {
+      grid-column: 2/3;
+    }
+
+    & ${GridWrapper}:nth-child(4n - 1) {
+      grid-column: 1/2;
+    }
+
+    & ${GridWrapper}:nth-child(4n) {
+      grid-column: 2/3;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    & {
+      grid-template-columns: 100%;
+    }
+  }
 `;
 
 type TProps = {
