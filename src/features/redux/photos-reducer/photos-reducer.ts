@@ -8,6 +8,7 @@ const initialState = {
     portionPhotos: [] as Array<TPhoto>,
     currentPage: 1,
     pagesCount: 0,
+    filterId : NaN,
 };
 
 type TInitialState = typeof initialState;
@@ -21,6 +22,7 @@ export const photosReducer = (state = initialState, action: TActionPhotoReducer)
                 photos: [...action.payload],
                 pagesCount: pagesCount,
                 portionPhotos: action.payload.slice(0, state.portionSizePhotos),
+                currentPage : 1,
             };
         case 'SET_CURRENT_PAGE':
             return {
@@ -45,8 +47,17 @@ export const photosReducer = (state = initialState, action: TActionPhotoReducer)
                 photos : state.photos.filter(photo => {return photo.id !== action.payload}),
             };
         case "UPDATE_PORTION_PHOTOS" : 
-        return {...state, portionPhotos : state.photos.slice((state.currentPage - 1) * state.portionSizePhotos,
-            state.currentPage * state.portionSizePhotos,)};
+            return {
+                ...state, 
+                portionPhotos : state.photos.slice(
+                    (state.currentPage - 1) * state.portionSizePhotos,
+                    state.currentPage * state.portionSizePhotos,)
+                };
+        case "SET_FILTER_ID" :
+            return {
+                ...state,
+                filterId : action.payload,
+            }
         default:
             return state;
     }
@@ -61,6 +72,7 @@ export const actionPhotos = {
     setPortionSizePhotos : (portionSizePhotos : number) => ({type : "SET_PORTION_SIZE_PHOTOS", payload : portionSizePhotos} as const),
     deleteCard : (id : number) => ({type : 'DELETE_CARD', payload : id} as const),
     updatePortionPhotos : () => ({type : 'UPDATE_PORTION_PHOTOS'} as const),
+    setFilterId : (filterId : number) => ({type : "SET_FILTER_ID", payload : filterId} as const)
 }; 
 
 type TThunkPhotosReducer = ThunkTypeCreator<TActionPhotoReducer>;
@@ -71,3 +83,12 @@ export const fetchPhotos = (): TThunkPhotosReducer => {
         dispatch(actionPhotos.setPhotos(data));
     };
 };
+
+export const setFilterId = (id : number) : TThunkPhotosReducer => {
+    return async (dispatch) => {
+        let data = await PhotosAPI.fetchPhotos(id);
+        console.log(data);
+        dispatch(actionPhotos.setPhotos(data));
+        dispatch(actionPhotos.setFilterId(id));
+    }
+}

@@ -32,14 +32,23 @@ const Wrapper = styled.div`
 type TProps = {
   photos: Array<TPhoto>;
   deleteCard: (value: number) => void;
+  setFilter: (value: number) => void;
 };
 
-export const CardRow: React.FC<TProps> = ({ photos, deleteCard }) => {
+export const CardRow: React.FC<TProps> = ({
+  photos,
+  deleteCard,
+  setFilter,
+}) => {
   return (
     <Wrapper>
       {photos.map((item) => (
         <GridWrapper>
-          <CardItem photo={item} deleteCard={deleteCard} />
+          <CardItem
+            photo={item}
+            deleteCard={deleteCard}
+            setFilter={setFilter}
+          />
         </GridWrapper>
       ))}
     </Wrapper>

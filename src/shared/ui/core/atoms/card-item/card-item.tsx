@@ -115,9 +115,14 @@ const Dropdown = styled.div`
 type TProps = {
   photo: TPhoto;
   deleteCard: (value: number) => void;
+  setFilter: (value: number) => void;
 };
 
-export const CardItem: React.FC<TProps> = ({ photo, deleteCard }) => {
+export const CardItem: React.FC<TProps> = ({
+  photo,
+  deleteCard,
+  setFilter,
+}) => {
   const onClickHandler = () => {
     deleteCard(photo.id);
   };
@@ -128,6 +133,12 @@ export const CardItem: React.FC<TProps> = ({ photo, deleteCard }) => {
     setActive(false);
   };
 
+  const onClickHandlerFilter = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
+    e.currentTarget.textContent && setFilter(+e.currentTarget.textContent);
+  };
+
   return (
     <Wrapper>
       <img src={photo.thumbnailUrl} alt={"photo" + photo.thumbnailUrl} />
@@ -136,9 +147,9 @@ export const CardItem: React.FC<TProps> = ({ photo, deleteCard }) => {
           Title : <span>{photo.title}</span>
         </Property>
         <Property>
-          AlbumId : <span>{photo.albumId}</span>
+          AlbumId : <span onClick={onClickHandlerFilter}>{photo.albumId}</span>
         </Property>
-        <Property onClick={(e) => e.stopPropagation()}>
+        <Property>
           id : <span>{photo.id}</span>
         </Property>
         <Property>

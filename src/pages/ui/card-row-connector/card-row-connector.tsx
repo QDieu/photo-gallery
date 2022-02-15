@@ -3,14 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   actionPhotos,
   fetchPhotos,
+  setFilterId,
 } from "../../../features/redux/photos-reducer";
 import { TAppState } from "../../../features/redux/store";
-import { TPhoto } from "../../../shared/types/Photo";
 import { CardRow } from "../../../shared/ui/core/molecules";
 
 export const CardRowConnector: React.FC<{}> = () => {
   let dispatch = useDispatch();
-  let photos = useSelector((state: TAppState) => state.photos.portionPhotos);
+  let { photos, filterId } = useSelector((state: TAppState) => ({
+    photos: state.photos.portionPhotos,
+    filterId: state.photos.filterId,
+  }));
 
   React.useEffect(() => {
     dispatch(fetchPhotos());
@@ -21,5 +24,12 @@ export const CardRowConnector: React.FC<{}> = () => {
     dispatch(actionPhotos.updatePortionPhotos());
   };
 
-  return <CardRow photos={photos} deleteCard={deleteCard} />;
+  const setFilter = (value: number) => {
+    if (filterId === value) value = NaN;
+    dispatch(setFilterId(value));
+  };
+
+  return (
+    <CardRow photos={photos} deleteCard={deleteCard} setFilter={setFilter} />
+  );
 };
