@@ -39,13 +39,7 @@ export const CardRow: React.FC<TProps> = ({ photos, deleteCard }) => {
     <Wrapper>
       {photos.map((item) => (
         <GridWrapper>
-          <CardItem
-            albumId={item.albumId}
-            id={item.id}
-            title={item.title}
-            url={item.thumbnailUrl}
-            deleteCard={deleteCard}
-          />
+          <CardItem photo={item} deleteCard={deleteCard} />
         </GridWrapper>
       ))}
     </Wrapper>

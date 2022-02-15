@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { CardModal } from "..";
+import { TPhoto } from "../../../../types/Photo";
 
 const Property = styled.div`
   opacity: 0;
@@ -21,6 +23,7 @@ const Property = styled.div`
 
     &:hover {
       color: #fff;
+      border-color: #fff;
       box-shadow: 1px 1px rgba(0, 0, 0, 0.3);
     }
   }
@@ -29,6 +32,8 @@ const Property = styled.div`
     margin-top: 8px;
 
     & span {
+      margin-right: 5px;
+
       display: inline-block;
       border: 1px solid black;
       padding: 0 15px;
@@ -40,6 +45,7 @@ const Property = styled.div`
 
       &:hover {
         color: #fff;
+        border-color: #fff;
         box-shadow: 1px 1px rgba(0, 0, 0, 0.3);
       }
     }
@@ -107,41 +113,44 @@ const Dropdown = styled.div`
 `;
 
 type TProps = {
-  url: string;
-  albumId: number;
-  id: number;
-  title: string;
+  photo: TPhoto;
   deleteCard: (value: number) => void;
 };
 
-export const CardItem: React.FC<TProps> = ({
-  url,
-  title,
-  albumId,
-  id,
-  deleteCard,
-}) => {
+export const CardItem: React.FC<TProps> = ({ photo, deleteCard }) => {
   const onClickHandler = () => {
-    deleteCard(id);
+    deleteCard(photo.id);
+  };
+
+  const [active, setActive] = React.useState(false);
+
+  const onClickHandlerModal = () => {
+    setActive(false);
   };
 
   return (
     <Wrapper>
-      <img src={url} alt={"photo" + url} />
+      <img src={photo.thumbnailUrl} alt={"photo" + photo.thumbnailUrl} />
       <Dropdown>
         <Property>
-          Title : <span>{title}</span>
+          Title : <span>{photo.title}</span>
         </Property>
         <Property>
-          AlbumId : <span>{albumId}</span>
+          AlbumId : <span>{photo.albumId}</span>
+        </Property>
+        <Property onClick={(e) => e.stopPropagation()}>
+          id : <span>{photo.id}</span>
         </Property>
         <Property>
-          id : <span>{id}</span>
-        </Property>
-        <Property onClick={onClickHandler}>
-          <span>Удалить</span>
+          <span onClick={onClickHandler}>Удалить</span>
+          <span onClick={() => setActive(true)}>Увеличить</span>
         </Property>
       </Dropdown>
+      <CardModal
+        active={active}
+        onClickHandlerModal={onClickHandlerModal}
+        url={photo.url}
+      />
     </Wrapper>
   );
 };
