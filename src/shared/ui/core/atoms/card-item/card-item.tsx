@@ -71,6 +71,7 @@ const Wrapper = styled.div`
 `;
 
 const Dropdown = styled.div`
+    box-sizing: border-box;
     width: 100%;
     padding: 20px;
 

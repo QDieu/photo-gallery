@@ -6,7 +6,6 @@ import { CardItem } from '../../atoms';
 const GridWrapper = styled.div``;
 
 const Wrapper = styled.div`
-    background-color: skyblue;
     padding: 32px;
     display: grid;
 

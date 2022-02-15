@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
 `;
 
 const Button = styled.div<TStyle>`
@@ -44,16 +45,40 @@ const Button = styled.div<TStyle>`
     }
 `;
 
+const Input = styled.input`
+    box-sizing: border-box;
+    margin-left: 16px;
+    padding: 8px;
+
+    width: 100px;
+    height: 36px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 16px;
+
+    &:focus,
+    &:active {
+        outline: none;
+        border: 2px solid #4200ff;
+    }
+`;
+
 type TProps = {
-    portionSize?: number;
-    pageCount?: number;
-    portionNumber?: number;
+    portionSize: number;
+    pagesCount: number;
+    portionNumber: number;
+    setPortionNumber: (value: number) => void;
+    currentPage: number;
+    setCurrentPage: (value: number) => void;
 };
 
 export const Pagination: React.FC<TProps> = ({
     portionSize = 5,
-    pageCount = 10,
+    pagesCount = 10,
     portionNumber = 1,
+    setPortionNumber,
+    currentPage,
+    setCurrentPage,
 }) => {
     const getPaginationGroup = () => {
         return new Array(portionSize)
@@ -61,29 +86,52 @@ export const Pagination: React.FC<TProps> = ({
             .map((_, idx) => portionSize * (portionNumber - 1) + idx + 1);
     };
 
+    console.log('RERENDER');
+
     return (
         <Wrapper>
-            <Button onClick={() => {}} disabled={true} active={false}>
+            <Button
+                onClick={() => portionNumber !== 1 && setPortionNumber(portionNumber - 1)}
+                disabled={portionNumber === 1}
+                active={false}>
                 &#60;
             </Button>
-            <Button onClick={() => {}} disabled={true} active={false}>
+            <Button
+                onClick={() => currentPage !== 1 && setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                active={false}>
                 prev
             </Button>
 
             {getPaginationGroup()
-                .filter((p) => p >= 1 && p <= 10)
+                .filter((p) => p >= 1 && p <= pagesCount)
                 .map((item, index) => (
-                    <Button key={index} onClick={() => {}} disabled={false} active={false}>
+                    <Button
+                        key={index}
+                        onClick={() => setCurrentPage(index + 1)}
+                        disabled={false}
+                        active={item === currentPage}>
                         {item}
                     </Button>
                 ))}
 
-            <Button onClick={() => {}} disabled={false} active={false}>
+            <Button
+                onClick={() => currentPage !== pagesCount && setCurrentPage(currentPage + 1)}
+                disabled={currentPage === pagesCount}
+                active={false}>
                 next
             </Button>
-            <Button onClick={() => {}} disabled={true} active={false}>
+            <Button
+                onClick={() =>
+                    portionNumber < pagesCount / portionSize && setPortionNumber(portionNumber + 1)
+                }
+                disabled={!(portionNumber < pagesCount / portionSize)}
+                active={false}>
                 &#62;
             </Button>
+            <form>
+                <Input />
+            </form>
         </Wrapper>
     );
 };
